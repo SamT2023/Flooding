@@ -1,0 +1,450 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "provenance": [],
+      "authorship_tag": "ABX9TyNfaKC7tZEqWRhPt9P9O+xz",
+      "include_colab_link": true
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    },
+    "language_info": {
+      "name": "python"
+    }
+  },
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "view-in-github",
+        "colab_type": "text"
+      },
+      "source": [
+        "<a href=\"https://colab.research.google.com/github/SamT2023/Flooding/blob/main/Satelite_prce\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 1,
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "Zxt5aB-dxR-N",
+        "outputId": "f61cb60e-8606-4b85-863e-f41d5ba113cb"
+      },
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Collecting descartes==1.1.0\n",
+            "  Downloading descartes-1.1.0-py3-none-any.whl.metadata (2.4 kB)\n",
+            "Requirement already satisfied: matplotlib in /usr/local/lib/python3.11/dist-packages (from descartes==1.1.0) (3.10.0)\n",
+            "Requirement already satisfied: contourpy>=1.0.1 in /usr/local/lib/python3.11/dist-packages (from matplotlib->descartes==1.1.0) (1.3.1)\n",
+            "Requirement already satisfied: cycler>=0.10 in /usr/local/lib/python3.11/dist-packages (from matplotlib->descartes==1.1.0) (0.12.1)\n",
+            "Requirement already satisfied: fonttools>=4.22.0 in /usr/local/lib/python3.11/dist-packages (from matplotlib->descartes==1.1.0) (4.55.3)\n",
+            "Requirement already satisfied: kiwisolver>=1.3.1 in /usr/local/lib/python3.11/dist-packages (from matplotlib->descartes==1.1.0) (1.4.8)\n",
+            "Requirement already satisfied: numpy>=1.23 in /usr/local/lib/python3.11/dist-packages (from matplotlib->descartes==1.1.0) (1.26.4)\n",
+            "Requirement already satisfied: packaging>=20.0 in /usr/local/lib/python3.11/dist-packages (from matplotlib->descartes==1.1.0) (24.2)\n",
+            "Requirement already satisfied: pillow>=8 in /usr/local/lib/python3.11/dist-packages (from matplotlib->descartes==1.1.0) (11.1.0)\n",
+            "Requirement already satisfied: pyparsing>=2.3.1 in /usr/local/lib/python3.11/dist-packages (from matplotlib->descartes==1.1.0) (3.2.1)\n",
+            "Requirement already satisfied: python-dateutil>=2.7 in /usr/local/lib/python3.11/dist-packages (from matplotlib->descartes==1.1.0) (2.8.2)\n",
+            "Requirement already satisfied: six>=1.5 in /usr/local/lib/python3.11/dist-packages (from python-dateutil>=2.7->matplotlib->descartes==1.1.0) (1.17.0)\n",
+            "Downloading descartes-1.1.0-py3-none-any.whl (5.8 kB)\n",
+            "Installing collected packages: descartes\n",
+            "Successfully installed descartes-1.1.0\n"
+          ]
+        }
+      ],
+      "source": [
+        "!pip install descartes==1.1.0"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "!pip install shapely==1.7.1"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 429
+        },
+        "id": "RSeU6eCo1sua",
+        "outputId": "e09b887c-c265-4f21-9284-94fbcadaf8bd"
+      },
+      "execution_count": 5,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Collecting shapely==1.7.1\n",
+            "  Downloading Shapely-1.7.1.tar.gz (383 kB)\n",
+            "\u001b[?25l     \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m0.0/383.2 kB\u001b[0m \u001b[31m?\u001b[0m eta \u001b[36m-:--:--\u001b[0m\r\u001b[2K     \u001b[91m━━━━━━━━━━━━━━━━━━━━\u001b[0m\u001b[90m╺\u001b[0m\u001b[90m━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m194.6/383.2 kB\u001b[0m \u001b[31m5.6 MB/s\u001b[0m eta \u001b[36m0:00:01\u001b[0m\r\u001b[2K     \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m383.2/383.2 kB\u001b[0m \u001b[31m6.6 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25h  Preparing metadata (setup.py) ... \u001b[?25l\u001b[?25hdone\n",
+            "Building wheels for collected packages: shapely\n",
+            "  Building wheel for shapely (setup.py) ... \u001b[?25l\u001b[?25hdone\n",
+            "  Created wheel for shapely: filename=Shapely-1.7.1-py2.py3-none-any.whl size=298258 sha256=4ab45f99e520445ddb4ba78a54c2c73669b50f114c7279e62676be243efe6e82\n",
+            "  Stored in directory: /root/.cache/pip/wheels/cb/c6/48/7e03d742a16fc4995e4b841cba776c2006fdf0fd6057be5681\n",
+            "Successfully built shapely\n",
+            "Installing collected packages: shapely\n",
+            "  Attempting uninstall: shapely\n",
+            "    Found existing installation: shapely 2.0.6\n",
+            "    Uninstalling shapely-2.0.6:\n",
+            "      Successfully uninstalled shapely-2.0.6\n",
+            "\u001b[31mERROR: pip's dependency resolver does not currently take into account all the packages that are installed. This behaviour is the source of the following dependency conflicts.\n",
+            "bigframes 1.31.0 requires geopandas>=0.12.2, but you have geopandas 0.10.2 which is incompatible.\u001b[0m\u001b[31m\n",
+            "\u001b[0mSuccessfully installed shapely-1.7.1\n"
+          ]
+        },
+        {
+          "output_type": "display_data",
+          "data": {
+            "application/vnd.colab-display-data+json": {
+              "pip_warning": {
+                "packages": [
+                  "shapely"
+                ]
+              },
+              "id": "48efcd37778b4a888015c6f6e9ec2085"
+            }
+          },
+          "metadata": {}
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "!pip install geopandas==0.10.2"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 654
+        },
+        "id": "pw6m7-xD1pfe",
+        "outputId": "32875fa4-4942-4452-fb1b-6d4b9681abcf"
+      },
+      "execution_count": 4,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Collecting geopandas==0.10.2\n",
+            "  Downloading geopandas-0.10.2-py2.py3-none-any.whl.metadata (935 bytes)\n",
+            "Requirement already satisfied: pandas>=0.25.0 in /usr/local/lib/python3.11/dist-packages (from geopandas==0.10.2) (2.2.2)\n",
+            "Requirement already satisfied: shapely>=1.6 in /usr/local/lib/python3.11/dist-packages (from geopandas==0.10.2) (2.0.6)\n",
+            "Collecting fiona>=1.8 (from geopandas==0.10.2)\n",
+            "  Downloading fiona-1.10.1-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (56 kB)\n",
+            "\u001b[2K     \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m56.6/56.6 kB\u001b[0m \u001b[31m2.4 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hRequirement already satisfied: pyproj>=2.2.0 in /usr/local/lib/python3.11/dist-packages (from geopandas==0.10.2) (3.7.0)\n",
+            "Requirement already satisfied: attrs>=19.2.0 in /usr/local/lib/python3.11/dist-packages (from fiona>=1.8->geopandas==0.10.2) (24.3.0)\n",
+            "Requirement already satisfied: certifi in /usr/local/lib/python3.11/dist-packages (from fiona>=1.8->geopandas==0.10.2) (2024.12.14)\n",
+            "Requirement already satisfied: click~=8.0 in /usr/local/lib/python3.11/dist-packages (from fiona>=1.8->geopandas==0.10.2) (8.1.8)\n",
+            "Requirement already satisfied: click-plugins>=1.0 in /usr/local/lib/python3.11/dist-packages (from fiona>=1.8->geopandas==0.10.2) (1.1.1)\n",
+            "Requirement already satisfied: cligj>=0.5 in /usr/local/lib/python3.11/dist-packages (from fiona>=1.8->geopandas==0.10.2) (0.7.2)\n",
+            "Requirement already satisfied: numpy>=1.23.2 in /usr/local/lib/python3.11/dist-packages (from pandas>=0.25.0->geopandas==0.10.2) (1.26.4)\n",
+            "Requirement already satisfied: python-dateutil>=2.8.2 in /usr/local/lib/python3.11/dist-packages (from pandas>=0.25.0->geopandas==0.10.2) (2.8.2)\n",
+            "Requirement already satisfied: pytz>=2020.1 in /usr/local/lib/python3.11/dist-packages (from pandas>=0.25.0->geopandas==0.10.2) (2024.2)\n",
+            "Requirement already satisfied: tzdata>=2022.7 in /usr/local/lib/python3.11/dist-packages (from pandas>=0.25.0->geopandas==0.10.2) (2024.2)\n",
+            "Requirement already satisfied: six>=1.5 in /usr/local/lib/python3.11/dist-packages (from python-dateutil>=2.8.2->pandas>=0.25.0->geopandas==0.10.2) (1.17.0)\n",
+            "Downloading geopandas-0.10.2-py2.py3-none-any.whl (1.0 MB)\n",
+            "\u001b[2K   \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m1.0/1.0 MB\u001b[0m \u001b[31m12.7 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hDownloading fiona-1.10.1-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (17.3 MB)\n",
+            "\u001b[2K   \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m17.3/17.3 MB\u001b[0m \u001b[31m47.1 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hInstalling collected packages: fiona, geopandas\n",
+            "  Attempting uninstall: geopandas\n",
+            "    Found existing installation: geopandas 1.0.1\n",
+            "    Uninstalling geopandas-1.0.1:\n",
+            "      Successfully uninstalled geopandas-1.0.1\n",
+            "\u001b[31mERROR: pip's dependency resolver does not currently take into account all the packages that are installed. This behaviour is the source of the following dependency conflicts.\n",
+            "bigframes 1.31.0 requires geopandas>=0.12.2, but you have geopandas 0.10.2 which is incompatible.\u001b[0m\u001b[31m\n",
+            "\u001b[0mSuccessfully installed fiona-1.10.1 geopandas-0.10.2\n"
+          ]
+        },
+        {
+          "output_type": "display_data",
+          "data": {
+            "application/vnd.colab-display-data+json": {
+              "pip_warning": {
+                "packages": [
+                  "geopandas"
+                ]
+              },
+              "id": "b2d111e16ab845a9876c29a88fc79346"
+            }
+          },
+          "metadata": {}
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "!pip install rasterio"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "q9d-xBjB1lR6",
+        "outputId": "ca500d79-8a63-4a66-df19-d4c0bc6c20d7"
+      },
+      "execution_count": 3,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Collecting rasterio\n",
+            "  Downloading rasterio-1.4.3-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (9.1 kB)\n",
+            "Collecting affine (from rasterio)\n",
+            "  Downloading affine-2.4.0-py3-none-any.whl.metadata (4.0 kB)\n",
+            "Requirement already satisfied: attrs in /usr/local/lib/python3.11/dist-packages (from rasterio) (24.3.0)\n",
+            "Requirement already satisfied: certifi in /usr/local/lib/python3.11/dist-packages (from rasterio) (2024.12.14)\n",
+            "Requirement already satisfied: click>=4.0 in /usr/local/lib/python3.11/dist-packages (from rasterio) (8.1.8)\n",
+            "Collecting cligj>=0.5 (from rasterio)\n",
+            "  Downloading cligj-0.7.2-py3-none-any.whl.metadata (5.0 kB)\n",
+            "Requirement already satisfied: numpy>=1.24 in /usr/local/lib/python3.11/dist-packages (from rasterio) (1.26.4)\n",
+            "Collecting click-plugins (from rasterio)\n",
+            "  Downloading click_plugins-1.1.1-py2.py3-none-any.whl.metadata (6.4 kB)\n",
+            "Requirement already satisfied: pyparsing in /usr/local/lib/python3.11/dist-packages (from rasterio) (3.2.1)\n",
+            "Downloading rasterio-1.4.3-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (22.2 MB)\n",
+            "\u001b[2K   \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m22.2/22.2 MB\u001b[0m \u001b[31m71.2 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hDownloading cligj-0.7.2-py3-none-any.whl (7.1 kB)\n",
+            "Downloading affine-2.4.0-py3-none-any.whl (15 kB)\n",
+            "Downloading click_plugins-1.1.1-py2.py3-none-any.whl (7.5 kB)\n",
+            "Installing collected packages: cligj, click-plugins, affine, rasterio\n",
+            "Successfully installed affine-2.4.0 click-plugins-1.1.1 cligj-0.7.2 rasterio-1.4.3\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "!pip install rioxarray"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "qqpqxN3h1-Y3",
+        "outputId": "974b58f2-ee6d-4a25-8640-9b5c1bdfd9ad"
+      },
+      "execution_count": 2,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Collecting rioxarray\n",
+            "  Downloading rioxarray-0.18.2-py3-none-any.whl.metadata (5.4 kB)\n",
+            "Requirement already satisfied: packaging in /usr/local/lib/python3.11/dist-packages (from rioxarray) (24.2)\n",
+            "Requirement already satisfied: rasterio>=1.3.7 in /usr/local/lib/python3.11/dist-packages (from rioxarray) (1.4.3)\n",
+            "Requirement already satisfied: xarray>=2024.7.0 in /usr/local/lib/python3.11/dist-packages (from rioxarray) (2025.1.1)\n",
+            "Requirement already satisfied: pyproj>=3.3 in /usr/local/lib/python3.11/dist-packages (from rioxarray) (3.7.0)\n",
+            "Requirement already satisfied: numpy>=1.23 in /usr/local/lib/python3.11/dist-packages (from rioxarray) (1.26.4)\n",
+            "Requirement already satisfied: certifi in /usr/local/lib/python3.11/dist-packages (from pyproj>=3.3->rioxarray) (2024.12.14)\n",
+            "Requirement already satisfied: affine in /usr/local/lib/python3.11/dist-packages (from rasterio>=1.3.7->rioxarray) (2.4.0)\n",
+            "Requirement already satisfied: attrs in /usr/local/lib/python3.11/dist-packages (from rasterio>=1.3.7->rioxarray) (24.3.0)\n",
+            "Requirement already satisfied: click>=4.0 in /usr/local/lib/python3.11/dist-packages (from rasterio>=1.3.7->rioxarray) (8.1.8)\n",
+            "Requirement already satisfied: cligj>=0.5 in /usr/local/lib/python3.11/dist-packages (from rasterio>=1.3.7->rioxarray) (0.7.2)\n",
+            "Requirement already satisfied: click-plugins in /usr/local/lib/python3.11/dist-packages (from rasterio>=1.3.7->rioxarray) (1.1.1)\n",
+            "Requirement already satisfied: pyparsing in /usr/local/lib/python3.11/dist-packages (from rasterio>=1.3.7->rioxarray) (3.2.1)\n",
+            "Requirement already satisfied: pandas>=2.1 in /usr/local/lib/python3.11/dist-packages (from xarray>=2024.7.0->rioxarray) (2.2.2)\n",
+            "Requirement already satisfied: python-dateutil>=2.8.2 in /usr/local/lib/python3.11/dist-packages (from pandas>=2.1->xarray>=2024.7.0->rioxarray) (2.8.2)\n",
+            "Requirement already satisfied: pytz>=2020.1 in /usr/local/lib/python3.11/dist-packages (from pandas>=2.1->xarray>=2024.7.0->rioxarray) (2024.2)\n",
+            "Requirement already satisfied: tzdata>=2022.7 in /usr/local/lib/python3.11/dist-packages (from pandas>=2.1->xarray>=2024.7.0->rioxarray) (2024.2)\n",
+            "Requirement already satisfied: six>=1.5 in /usr/local/lib/python3.11/dist-packages (from python-dateutil>=2.8.2->pandas>=2.1->xarray>=2024.7.0->rioxarray) (1.17.0)\n",
+            "Downloading rioxarray-0.18.2-py3-none-any.whl (61 kB)\n",
+            "\u001b[2K   \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m61.9/61.9 kB\u001b[0m \u001b[31m2.4 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hInstalling collected packages: rioxarray\n",
+            "Successfully installed rioxarray-0.18.2\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "import gzip\n",
+        "import descartes\n",
+        "import pickle\n",
+        "import numpy as np\n",
+        "from shapely.geometry import mapping\n",
+        "import geopandas as gpd\n",
+        "import os\n",
+        "import glob\n",
+        "import rasterio\n",
+        "import rioxarray\n",
+        "import xarray as xr\n",
+        "import matplotlib.pyplot as plt\n",
+        "from datetime import datetime, timedelta\n",
+        "import datetime\n",
+        "import calendar\n",
+        "#import cartopy.crs as ccrs\n",
+        "import pandas as pd\n",
+        "from scipy import signal\n",
+        "import pickle\n",
+        "import h5py"
+      ],
+      "metadata": {
+        "id": "eegk3BNm1jSq"
+      },
+      "execution_count": 3,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "#globe_proj = ccrs.PlateCarree()\n",
+        "def JulianDate_to_MMDDYYY(y,jd):\n",
+        "    month = 1\n",
+        "    day = 0\n",
+        "    while jd - calendar.monthrange(y,month)[1] > 0 and month <= 12:\n",
+        "        jd = jd - calendar.monthrange(y,month)[1]\n",
+        "        month = month + 1\n",
+        "    return jd, month\n",
+        "\n",
+        "def getLine(data, line_no):\n",
+        "    n = 0\n",
+        "    lastPos = -1\n",
+        "    for i in range(0, len(data) - 1):\n",
+        "        if data[i] == \"\\n\":\n",
+        "            n = n + 1\n",
+        "            if n == line_no:\n",
+        "                return data[lastPos + 1:i]\n",
+        "            else:\n",
+        "                lastPos = i;\n",
+        "\n",
+        "    if(n == line_no - 1):\n",
+        "        return data[lastPos + 1:]\n",
+        "    return \"\""
+      ],
+      "metadata": {
+        "id": "NSkeI_TO2LZF"
+      },
+      "execution_count": 4,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "Define the project folder"
+      ],
+      "metadata": {
+        "id": "nn2N-Jgq2Rjy"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "folder = os.getcwd()\n",
+        "folder"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 36
+        },
+        "id": "Agodsde42Uo9",
+        "outputId": "34e2f5c2-7c8b-4a2a-91fe-b6ef5ba13946"
+      },
+      "execution_count": 5,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "'/content'"
+            ],
+            "application/vnd.google.colaboratory.intrinsic+json": {
+              "type": "string"
+            }
+          },
+          "metadata": {},
+          "execution_count": 5
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "folder_files= '/content/rgccs1h2301500.bin.gz'\n",
+        "folder_files"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 36
+        },
+        "id": "MM-wdaH32Znn",
+        "outputId": "22f09295-5ae7-4345-b297-b97122b41ba1"
+      },
+      "execution_count": 6,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "'/content/rgccs1h2301500.bin.gz'"
+            ],
+            "application/vnd.google.colaboratory.intrinsic+json": {
+              "type": "string"
+            }
+          },
+          "metadata": {},
+          "execution_count": 6
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "Define the name for reading"
+      ],
+      "metadata": {
+        "id": "3usxJemY2ncr"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "item='rgccs1h2301500.bin.gz'\n",
+        "item"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 36
+        },
+        "id": "mwJhwQ1D2qei",
+        "outputId": "206c9f23-ba44-4443-fd9d-30f62b2fac9c"
+      },
+      "execution_count": 7,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "'rgccs1h2301500.bin.gz'"
+            ],
+            "application/vnd.google.colaboratory.intrinsic+json": {
+              "type": "string"
+            }
+          },
+          "metadata": {},
+          "execution_count": 7
+        }
+      ]
+    }
+  ]
+}
